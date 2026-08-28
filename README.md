@@ -47,9 +47,9 @@ Tres piezas para para inyectar LoansService:
 
 ## Persistencia de los datos..
 
-Los loans se almacenan en un arreglo dentro de `LoansService`, por lo que existen únicamente en memoria mientras la aplicación está ejecutándose.
+Los loans se almacenan en un arreglo dentro de `LoansService`, por lo que existen únicamente en memoria mientras la aplicación está ejecutándose
 
-Al reiniciar la aplicación, el arreglo vuelve a crearse con los préstamos definidos inicialmente (en el loan service). Es por esto que los préstamos creados o eliminados durante la ejecución anterior desaparecen.
+Al reiniciar la aplicación, el arreglo vuelve a crearse con los préstamos definidos inicialmente (en el loan service). Es por esto que los préstamos creados o eliminados durante la ejecución anterior desaparecen
 
 
 ## Evidencias ^.^
@@ -58,7 +58,7 @@ Al reiniciar la aplicación, el arreglo vuelve a crearse con los préstamos defi
 ![GET loans](./evidence/get-loans.png)
 
 ### Filtrar préstamos por estado
-![Filter loans](./evidence/filter-loans.png)
+![Filter loans](./evidence/filter-loan.png)
 
 ### Crear préstamo
 ![Create loan](./evidence/create-loan.png)
