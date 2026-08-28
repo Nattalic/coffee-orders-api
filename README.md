@@ -60,6 +60,9 @@ Al reiniciar la aplicación, el arreglo vuelve a crearse con los préstamos defi
 ### Filtrar préstamos por estado
 ![Filter loans](./evidence/filter-loan.png)
 
+### id inexistente
+![Filter loans](./evidence/error-404.png)
+
 ### Crear préstamo
 ![Create loan](./evidence/create-loan.png)
 ![Create loan](./evidence/create-loan-2.png)
