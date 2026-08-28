@@ -58,7 +58,7 @@ Al reiniciar la aplicación, el arreglo vuelve a crearse con los préstamos defi
 ![GET loans](./evidence/get-loans.png)
 
 ### Filtrar préstamos por estado
-![Filter loans](./evidence/filter-loans.png)
+![Filter loans](./evidence/filter-loan.png)
 
 ### Crear préstamo
 ![Create loan](./evidence/create-loan.png)
