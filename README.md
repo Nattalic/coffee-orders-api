@@ -33,21 +33,16 @@ Luego, el controller llama al método correspondiente de `LoansService`
 
 El service realiza la operación sobre el arreglo de loans y devuelve el resultado al controller. NestJS envía esa información como respuesta al cliente
 
-Ejemplo:
-
-`GET /api/loans?status=borrowed`
-
-Controller → recibe `status` → llama a `LoansService` → service filtra los loanss → devuelve el resultado
 
 ## Inyección de LoansService :D
 
 Tres piezas para para inyectar LoansService:
 
-1. Marcar el service con `@Injectable()`.
+1. Marcar el service con `@Injectable()`
 
-2. Registrar `LoansService` dentro de `providers` en `LoansModule`.
+2. Registrar `LoansService` dentro de `providers` en `LoansModule`
 
-3. Inyectar `LoansService` mediante el constructor de `LoansController`.
+3. Inyectar `LoansService` mediante el constructor de `LoansController`
 
 
 ## Persistencia de los datos..
@@ -57,7 +52,7 @@ Los loans se almacenan en un arreglo dentro de `LoansService`, por lo que existe
 Al reiniciar la aplicación, el arreglo vuelve a crearse con los préstamos definidos inicialmente (en el loan service). Es por esto que los préstamos creados o eliminados durante la ejecución anterior desaparecen.
 
 
-## Evidencias
+## Evidencias ^.^
 
 ### Consultar préstamos
 ![GET loans](./evidence/get-loans.png)
