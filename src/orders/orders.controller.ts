@@ -34,6 +34,11 @@ export class OrdersController {
     return this.ordersSummaryService.getSummary();
   }
 
+  @Get('pending')
+  findRecentPending() {
+    return this.ordersService.findRecentPending();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(Number(id));
@@ -52,5 +57,10 @@ export class OrdersController {
   @Patch(':id/ready')
   markAsReady(@Param('id') id: string) {
     return this.ordersService.markAsReady(Number(id));
+  }
+
+  @Get(':id/estimate')
+  estimatePreparationTime(@Param('id') id: string) {
+    return this.ordersService.estimatePreparation(Number(id));
   }
 }

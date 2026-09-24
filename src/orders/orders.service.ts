@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { CustomerEntity } from './entities/customer.entity';
 import { OrderEntity } from './entities/order.entity';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRulesService } from './order-rules/order-rules.service';
+import { OrderPreparationEstimateService } from './order-preparation-estimate/order-preparation-estimate.service';
 
 @Injectable()
 export class OrdersService {
@@ -17,6 +18,8 @@ export class OrdersService {
     private readonly customersRepository: Repository<CustomerEntity>,
 
     private readonly orderRulesService: OrderRulesService,
+
+    private readonly orderPreparationEstimateService: OrderPreparationEstimateService,
   ) {}
   //repositories
 
@@ -103,5 +106,25 @@ export class OrdersService {
     order.status = 'ready';
 
     return this.ordersRepository.save(order);
+  }
+
+  async estimatePreparation(id: number): Promise<{
+    orderId: number;
+    status: string;
+    estimatedMinutes: number;
+  }> {
+    const order = await this.findOne(id);
+
+    //se le manda la orden al rules para que el estime el tiempo de ese pedido
+    return this.orderPreparationEstimateService.estimate(order);
+  }
+
+  async findRecentPending(): Promise<OrderEntity[]> {
+    return this.ordersRepository.find({
+      where: { quantity: MoreThan(2) }, //relacion
+      relations: { customer: true }, //traer datos de customer tmb
+      order: { id: 'DESC' },
+      take: 2, //traer dos datos
+    });
   }
 }
