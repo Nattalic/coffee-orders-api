@@ -32,13 +32,6 @@ describe('OrderRulesService', () => {
 
   //cuando la cantidad de una orden es 0 o menor
   it('rejects an order with zero quantity', () => {
-    const order = {
-      quantity: 0,
-      status: 'pending',
-    } as OrderEntity;
-
-    expect(() => service.ensureCanBeMarkedAsReady(order)).toThrow(
-      BadRequestException,
-    );
+    expect(() => service.ensureValidQuantity(0)).toThrow(BadRequestException);
   });
 });

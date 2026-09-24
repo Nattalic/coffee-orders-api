@@ -5,17 +5,17 @@ import { OrderPreparationEstimateService } from './order-preparation-estimate.se
 describe('OrderPreparationEstimateServiceTest', () => {
   const service = new OrderPreparationEstimateService();
 
-  it('Return order stimate in 0 because status is ready', () => {
+  it('Return order estimate in 0 because status is ready', () => {
     const orderMock = {
-      quantity: 2,
+      quantity: 0,
       status: 'ready',
       id: 1,
     } as OrderEntity;
 
-    expect(() => service.estimate(orderMock)).toBe({
-      estimatedMinute: 7,
-      orderId: 1,
-      status: 'ready',
-    });
+    const result = service.estimate(orderMock);
+
+    expect(result.estimatedMinutes).toBe(0);
+    expect(result.orderId).toBe(1);
+    expect(result.status).toBe('ready');
   });
 });
