@@ -182,4 +182,42 @@ export class OrdersService {
       message: classification.message,
     };
   }
+
+  async findPendingQueue(): Promise<{
+    totalPending: number;
+
+    //pedidos incluidos en la respuesta pero no mayor s 5
+    showing: number;
+    orders: OrderEntity[];
+  }> {
+    const orders = await this.ordersRepository.find({
+      where: {
+        status: 'pending',
+      },
+
+      relations: {
+        customer: true,
+      },
+
+      order: {
+        id: 'ASC',
+      },
+
+      take: 5,
+    });
+
+    //cuenta todos los pedidos pendientes
+    const totalPending = await this.ordersRepository.countBy({
+      status: 'pending',
+    });
+
+    //cantidad de pedidos que realmente se estan mostrando en este caso take 5
+    const showing = orders.length;
+
+    return {
+      totalPending,
+      showing,
+      orders,
+    };
+  }
 }

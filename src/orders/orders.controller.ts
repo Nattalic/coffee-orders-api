@@ -39,6 +39,11 @@ export class OrdersController {
     return this.ordersService.findRecentPending();
   }
 
+  @Get('pending-queue')
+  findPendingQueue() {
+    return this.ordersService.findPendingQueue();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(Number(id));
