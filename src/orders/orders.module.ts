@@ -8,6 +8,7 @@ import { OrdersService } from './orders.service';
 import { OrderRulesService } from './order-rules/order-rules.service';
 import { OrdersSummaryService } from './order-summary/orders-summary.service';
 import { OrderPreparationEstimateService } from './order-preparation-estimate/order-preparation-estimate.service';
+import { OrderPriorityService } from './order-priority-service/order-priority.service';
 
 //registrar entidades en orders module
 @Module({
@@ -18,6 +19,7 @@ import { OrderPreparationEstimateService } from './order-preparation-estimate/or
     OrderRulesService,
     OrdersSummaryService,
     OrderPreparationEstimateService,
+    OrderPriorityService,
   ],
 })
 export class OrdersModule {}

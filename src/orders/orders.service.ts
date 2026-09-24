@@ -8,6 +8,7 @@ import { OrderEntity } from './entities/order.entity';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRulesService } from './order-rules/order-rules.service';
 import { OrderPreparationEstimateService } from './order-preparation-estimate/order-preparation-estimate.service';
+import { OrderPriorityService } from './order-priority-service/order-priority.service';
 
 @Injectable()
 export class OrdersService {
@@ -21,6 +22,8 @@ export class OrdersService {
     private readonly orderRulesService: OrderRulesService,
 
     private readonly orderPreparationEstimateService: OrderPreparationEstimateService,
+
+    private readonly orderPriorityService: OrderPriorityService,
   ) {}
 
   //deja de trabajar local y se empieza a trabajar en la base de datos
@@ -158,5 +161,25 @@ export class OrdersService {
       //traer solo dos datos
       take: 2,
     });
+  }
+
+  async getPriority(id: number): Promise<{
+    orderId: number;
+    status: string;
+    quantity: number;
+    priority: string;
+    message: string;
+  }> {
+    const order = await this.findOne(id);
+
+    const classification = this.orderPriorityService.classify(order);
+
+    return {
+      orderId: order.id,
+      status: order.status,
+      quantity: order.quantity,
+      priority: classification.priority,
+      message: classification.message,
+    };
   }
 }
