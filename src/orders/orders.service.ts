@@ -23,17 +23,17 @@ export class OrdersService {
     private readonly orderPreparationEstimateService: OrderPreparationEstimateService,
   ) {}
 
-  // se deja de trabajar local y se empieza a trabajar en la base de datos
+  //deja de trabajar local y se empieza a trabajar en la base de datos
   async create(createOrderDto: CreateOrderDto): Promise<OrderEntity> {
-    // valida que la cantidad sea mayor que 0
+    //valida que la cantidad sea mayor que 0
     this.orderRulesService.ensureValidQuantity(createOrderDto.quantity);
 
-    // busca el customer asociado a la orden
+    //busca el customer asociado a la orden
     const customer = await this.customersRepository.findOneBy({
       id: createOrderDto.customerId,
     });
 
-    // si el customer no existe, lanza error 404
+    //i el customer no existe, lanza error 404
     if (!customer) {
       throw new NotFoundException(
         `Customer with id ${createOrderDto.customerId} was not found`,
@@ -50,7 +50,7 @@ export class OrdersService {
     return this.ordersRepository.save(order);
   }
 
-  // metodo find all
+  //metodo find all
   async findAll(): Promise<OrderEntity[]> {
     return this.ordersRepository.find({
       relations: {
@@ -63,9 +63,9 @@ export class OrdersService {
     });
   }
 
-  // metodo find one
+  //metodo find one
   async findOne(id: number): Promise<OrderEntity> {
-    // busca una orden por su id y trae también la relación con customer
+    //busca una orden por su id y trae también la relación con customer
     const order = await this.ordersRepository.findOne({
       where: { id },
 
@@ -74,7 +74,7 @@ export class OrdersService {
       },
     });
 
-    // si la orden no existe, lanza error 404
+    //si la orden no existe, lanza error 404
     if (!order) {
       throw new NotFoundException(`Order with id ${id} was not found`);
     }
@@ -82,40 +82,38 @@ export class OrdersService {
     return order;
   }
 
-  // metodo update
+  //metodo update
   async update(
     id: number,
     updateOrderDto: UpdateOrderDto,
   ): Promise<OrderEntity> {
-    // busca primero la orden
+    //busca primero la orden
     const order = await this.findOne(id);
 
-    // si se quiere modificar quantity,
-    // valida que la nueva cantidad sea mayor que 0
+    //si se quiere modificar quantity,
+    //valida que la nueva cantidad sea mayor que 0
     if (updateOrderDto.quantity !== undefined) {
       this.orderRulesService.ensureValidQuantity(updateOrderDto.quantity);
     }
 
-    // mezcla los nuevos datos con la orden existente
+    //mezcla los nuevos datos con la orden existente
     this.ordersRepository.merge(order, updateOrderDto);
 
-    // guarda los cambios en la base de datos
+    //guarda los cambios en la base de datos
     return this.ordersRepository.save(order);
   }
 
-  // metodo remove
+  //metodo remove
   async remove(id: number): Promise<OrderEntity> {
-    // busca primero la orden
-    // si no existe, findOne lanza el error 404
     const order = await this.findOne(id);
 
     // elimina la orden de la base de datos
     return this.ordersRepository.remove(order);
   }
 
-  // marcar una orden como ready
+  //marcar una orden como ready
   async markAsReady(id: number): Promise<OrderEntity> {
-    // buscamos la orden por el id
+    //buscamos la orden por el id
     const order = await this.findOne(id);
 
     this.orderRulesService.ensureCanBeMarkedAsReady(order);
@@ -125,39 +123,39 @@ export class OrdersService {
     return this.ordersRepository.save(order);
   }
 
-  // estimar el tiempo de preparacion de una orden
+  //estimar el tiempo de preparacion de una orden
   async estimatePreparation(id: number): Promise<{
     orderId: number;
     status: string;
     estimatedMinutes: number;
   }> {
-    // busca la orden por id
+    //busca la orden por id
     const order = await this.findOne(id);
 
-    // se le manda la orden al service para que estime
-    // el tiempo de preparacion de ese pedido
+    //se le manda la orden al service para que estime
+    //el tiempo de preparacion de ese pedido
     return this.orderPreparationEstimateService.estimate(order);
   }
 
-  // buscar ordenes recientes con quantity mayor a 2
+  //buscar ordenes recientes con quantity mayor a 2
   async findRecentPending(): Promise<OrderEntity[]> {
     return this.ordersRepository.find({
-      // filtra las ordenes cuya cantidad sea mayor a 2
+      //filtra las ordenes cuya cantidad sea mayor a 2
       where: {
         quantity: MoreThan(2),
       },
 
-      // traer datos de customer tambien
+      //traer datos de customer tambien
       relations: {
         customer: true,
       },
 
-      // ordenar desde la orden mas reciente
+      //ordenar desde la orden mas reciente
       order: {
         id: 'DESC',
       },
 
-      // traer solo dos datos
+      //traer solo dos datos
       take: 2,
     });
   }
