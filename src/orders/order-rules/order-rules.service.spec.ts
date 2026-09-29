@@ -1,3 +1,4 @@
+//prueba unitaria (testear una parte especifica del codigo)
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { OrderEntity } from '../entities/order.entity';
 import { OrderRulesService } from './order-rules.service';
@@ -9,6 +10,7 @@ describe('OrderRulesService', () => {
   const service = new OrderRulesService();
 
   //la orden cumple con las condiciones para estar lista (ready)
+  //it son los casos
   it('allows a pending order with a positive quantity', () => {
     const order = {
       quantity: 2,
@@ -25,6 +27,7 @@ describe('OrderRulesService', () => {
       status: 'ready',
     } as OrderEntity;
 
+    //expect es lo que yo espero que va a suceder
     expect(() => service.ensureCanBeMarkedAsReady(order)).toThrow(
       ConflictException,
     );
