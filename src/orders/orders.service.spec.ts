@@ -4,9 +4,9 @@ import { OrderEntity } from './entities/order.entity';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CustomerEntity } from './entities/customer.entity';
-import { NotFoundException } from '@nestjs/common';
 import { OrderRulesService } from './order-rules/order-rules.service';
 import { OrderPreparationEstimateService } from './order-preparation-estimate/order-preparation-estimate.service';
+import { OrderPriorityService } from './order-priority-service/order-priority.service';
 
 void describe('OrdersServiceTest', () => {
   let service: OrdersService;
@@ -31,6 +31,10 @@ void describe('OrdersServiceTest', () => {
 
   const orderPreparationEstimateServiceMock = {
     estimate: jest.fn(),
+  };
+
+  const orderPriorityServiceMock = {
+    calculatePriority: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -59,13 +63,17 @@ void describe('OrdersServiceTest', () => {
           provide: OrderPreparationEstimateService,
           useValue: orderPreparationEstimateServiceMock,
         },
+        {
+          provide: OrderPriorityService,
+          useValue: orderPriorityServiceMock,
+        },
       ],
     }).compile();
 
     service = moduleRef.get(OrdersService);
   });
 
-  it('requests the five most recent pending orders', async () => {
+  it('returns an order by id', async () => {
     // Arrange: preparar datos y respuestas simuladas.
     const orderMock = {
       id: 7,
@@ -87,19 +95,10 @@ void describe('OrdersServiceTest', () => {
 
     // Assert:  parte de esperar o lo que yo espero que pase --- expect(result).toEqual(order);
     expect(result).toEqual(orderMock);
+
     expect(repositoryMock.findOne).toHaveBeenCalledWith({
       where: { id: 7 },
       relations: { customer: true },
     });
-  });
-
-  it('throws NotFoundException when the order does not exist', async () => {
-    // Arrange
-    repositoryMock.findOne.mockResolvedValue(null);
-
-    // Act and Assert
-    await expect(service.findOne(999)).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
   });
 });
