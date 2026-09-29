@@ -7,6 +7,7 @@ import { CustomerEntity } from './entities/customer.entity';
 import { OrderRulesService } from './order-rules/order-rules.service';
 import { OrderPreparationEstimateService } from './order-preparation-estimate/order-preparation-estimate.service';
 import { OrderPriorityService } from './order-priority-service/order-priority.service';
+import { NotFoundException } from '@nestjs/common';
 
 void describe('OrdersServiceTest', () => {
   let service: OrdersService;
@@ -73,7 +74,7 @@ void describe('OrdersServiceTest', () => {
     service = moduleRef.get(OrdersService);
   });
 
-  it('returns an order by id', async () => {
+  it('returns an order when the id exits', async () => {
     // Arrange: preparar datos y respuestas simuladas.
     const orderMock = {
       id: 7,
@@ -94,11 +95,24 @@ void describe('OrdersServiceTest', () => {
     const result = await service.findOne(7);
 
     // Assert:  parte de esperar o lo que yo espero que pase --- expect(result).toEqual(order);
+    //los expect trabajan en conjunto no individual
     expect(result).toEqual(orderMock);
-
     expect(repositoryMock.findOne).toHaveBeenCalledWith({
       where: { id: 7 },
       relations: { customer: true },
     });
+  });
+
+  it('throws NotFoundException when the order does not exist', async () => {
+    // Arrange
+    //queremos que cuando no haya ordenes salga el error (testear)
+    //estamos esperando un error (de que no encuentre el id)
+    //se manda un null osea que nho hay ninguna orden
+    repositoryMock.findOne.mockResolvedValue(null);
+
+    // Act and Assert
+    await expect(service.findOne(999)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
   });
 });
