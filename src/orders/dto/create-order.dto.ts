@@ -1,6 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+//editamos el dto  para que tenga validaciones
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
+
 export class CreateOrderDto {
+  @IsString()
+  @IsNotEmpty() //no se puede dejar vacio
+  @MaxLength(60) //maximo 60
   item!: string;
+
+  @IsInt()
+  @Min(1)
+  @Max(20)
   quantity!: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  @Min(1)
   customerId!: number;
 }
 

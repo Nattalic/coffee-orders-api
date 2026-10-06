@@ -9,6 +9,7 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRulesService } from './order-rules/order-rules.service';
 import { OrderPreparationEstimateService } from './order-preparation-estimate/order-preparation-estimate.service';
 import { OrderPriorityService } from './order-priority-service/order-priority.service';
+import { FilterOrdersQueryDto } from './dto/filter-orders-query.dto';
 
 @Injectable()
 export class OrdersService {
@@ -219,5 +220,15 @@ export class OrdersService {
       showing,
       orders,
     };
+  }
+
+  //si hay estado, filtra por ese estado; si no hay, no agrega ese filtro
+  async findFiltered(query: FilterOrdersQueryDto) {
+    return this.ordersRepository.find({
+      where: query.status ? { status: query.status } : {},
+      relations: { customer: true },
+      order: { id: 'ASC' },
+      take: query.limit,
+    });
   }
 }
